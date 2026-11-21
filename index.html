@@ -1,0 +1,358 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solar Panel Booking</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:linear-gradient(135deg,#e0f2fe,#f0fdf4);
+ color:#183047;
+}
+header{
+ background:linear-gradient(110deg,#075985,#15803d);
+ color:white;text-align:center;padding:30px 15px;
+}
+header h1{margin:0 0 8px}
+.container{
+ max-width:850px;margin:25px auto;padding:25px;
+ background:white;border-radius:16px;
+ box-shadow:0 5px 25px #0002;
+}
+h2{color:#087c54;font-size:19px;border-bottom:2px solid #e2eee8;padding-bottom:10px;margin-top:28px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.field{margin-bottom:15px}
+label{display:block;font-weight:bold;font-size:14px;margin-bottom:7px}
+input,select,textarea{
+ width:100%;padding:12px;border:1px solid #ccd8df;
+ border-radius:8px;font-size:14px;background:#fff;
+}
+input:focus,textarea:focus,select:focus{
+ outline:2px solid #16a34a;border-color:transparent;
+}
+input[type=file]{background:#f0fdf4}
+.full{grid-column:1/-1}
+button{
+ width:100%;padding:15px;border:0;border-radius:9px;
+ background:#15803d;color:white;font-size:17px;
+ font-weight:bold;cursor:pointer;margin-top:15px;
+}
+button:disabled{opacity:.6;cursor:not-allowed}
+.note{font-size:12px;color:#64748b;line-height:1.5}
+#message{margin-top:15px;text-align:center;font-weight:bold}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.container{margin:12px;padding:17px}}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>☀ Solar Panel Booking</h1>
+<p>Apply for Your Solar Installation</p>
+</header>
+
+<div class="container">
+
+<h2>Solar System Details</h2>
+
+<form id="bookingForm">
+<div class="grid">
+
+<div class="field">
+<label>Solar Capacity *</label>
+<select name="solar_capacity" required>
+<option value="">Select Capacity</option>
+<option>1 KW</option>
+<option>2 KW</option>
+<option>3 KW</option>
+<option>5 KW</option>
+<option>7 KW</option>
+<option>10 KW</option>
+<option>15 KW</option>
+<option>20 KW</option>
+<option>Other</option>
+</select>
+</div>
+
+<div class="field">
+<label>Full Name *</label>
+<input name="full_name" required>
+</div>
+
+<div class="field">
+<label>Mobile Number (Aadhaar Registered) *</label>
+<input name="mobile_number" type="tel"
+pattern="[6-9][0-9]{9}" maxlength="10" required>
+</div>
+
+<div class="field">
+<label>Email ID</label>
+<input name="email" type="email">
+</div>
+
+<div class="field full">
+<label>Complete Address *</label>
+<textarea name="address" required rows="3"></textarea>
+</div>
+
+<div class="field">
+<label>Village / Town</label>
+<input name="village">
+</div>
+
+<div class="field">
+<label>Mandal</label>
+<input name="mandal">
+</div>
+
+<div class="field">
+<label>District</label>
+<input name="district">
+</div>
+
+<div class="field">
+<label>State</label>
+<input name="state" value="Telangana">
+</div>
+
+<div class="field">
+<label>PIN Code</label>
+<input name="pincode" maxlength="6" pattern="[0-9]{6}">
+</div>
+
+</div>
+
+<h2>Aadhaar Details</h2>
+<div class="grid">
+
+<div class="field full">
+<label>Aadhaar Number *</label>
+<input name="aadhaar_number" maxlength="12"
+pattern="[0-9]{12}" required>
+</div>
+
+<div class="field">
+<label>Aadhaar Front Side *</label>
+<input type="file" name="aadhaar_front"
+accept="image/jpeg,image/png,image/webp,application/pdf" required>
+</div>
+
+<div class="field">
+<label>Aadhaar Back Side *</label>
+<input type="file" name="aadhaar_back"
+accept="image/jpeg,image/png,image/webp,application/pdf" required>
+</div>
+
+</div>
+
+<h2>Electricity Details</h2>
+<div class="grid">
+
+<div class="field full">
+<label>Electricity Consumer Number *</label>
+<input name="electricity_consumer_number" required>
+</div>
+
+<div class="field full">
+<label>Electricity Bill Photo *</label>
+<input type="file" name="electricity_bill"
+accept="image/jpeg,image/png,image/webp,application/pdf" required>
+</div>
+
+</div>
+
+<h2>Bank Account Details</h2>
+<div class="grid">
+
+<div class="field">
+<label>Bank Account Number *</label>
+<input name="bank_account_number" required>
+</div>
+
+<div class="field">
+<label>IFSC Code *</label>
+<input name="ifsc_code" maxlength="11"
+pattern="[A-Za-z]{4}0[A-Za-z0-9]{6}" required>
+</div>
+
+<div class="field full">
+<label>Bank Proof / Passbook Photo *</label>
+<input type="file" name="bank_proof"
+accept="image/jpeg,image/png,image/webp,application/pdf" required>
+</div>
+
+</div>
+
+<h2>PAN Card Details</h2>
+<div class="grid">
+
+<div class="field full">
+<label>PAN Card Number *</label>
+<input name="pan_number" maxlength="10"
+pattern="[A-Za-z]{5}[0-9]{4}[A-Za-z]" required>
+</div>
+
+<div class="field full">
+<label>PAN Card Photo *</label>
+<input type="file" name="pan_card"
+accept="image/jpeg,image/png,image/webp,application/pdf" required>
+</div>
+
+</div>
+
+<h2>Installation Site Details</h2>
+<div class="grid">
+<div class="field full">
+<label>Solar Installation Site Photo *</label>
+<input type="file" name="site_photo"
+accept="image/jpeg,image/png,image/webp" required>
+</div>
+</div>
+
+<div class="field">
+<label>
+<input type="checkbox" id="consent" required style="width:auto">
+I consent to the collection and secure processing of the information
+provided above for solar booking and installation purposes.
+</label>
+</div>
+
+<p class="note">
+Please ensure that all details and uploaded documents are correct.
+Accepted files: JPG, PNG, WEBP and PDF (site photo: images only).
+Maximum file size: 8 MB per file.
+</p>
+
+<button type="submit" id="submitBtn">SUBMIT SOLAR BOOKING</button>
+<div id="message"></div>
+
+</form>
+</div>
+
+<script>
+const SUPABASE_URL = "YOUR_SUPABASE_URL";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+
+const db = window.supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_ANON_KEY
+);
+
+const form = document.getElementById("bookingForm");
+const message = document.getElementById("message");
+const button = document.getElementById("submitBtn");
+
+const fileFields = {
+ aadhaar_front: "aadhaar_front_path",
+ aadhaar_back: "aadhaar_back_path",
+ electricity_bill: "electricity_bill_path",
+ bank_proof: "bank_proof_path",
+ pan_card: "pan_card_path",
+ site_photo: "site_photo_path"
+};
+
+form.addEventListener("submit", async function(e){
+ e.preventDefault();
+
+ if(!form.reportValidity()) return;
+
+ button.disabled = true;
+ button.textContent = "UPLOADING...";
+
+ try{
+   const fd = new FormData(form);
+   const applicationId = crypto.randomUUID();
+
+   const data = {
+     id: applicationId,
+     solar_capacity: fd.get("solar_capacity"),
+     full_name: fd.get("full_name").trim(),
+     mobile_number: fd.get("mobile_number"),
+     email: fd.get("email") || null,
+     address: fd.get("address"),
+     village: fd.get("village") || null,
+     mandal: fd.get("mandal") || null,
+     district: fd.get("district") || null,
+     state: fd.get("state") || null,
+     pincode: fd.get("pincode") || null,
+     aadhaar_number: fd.get("aadhaar_number"),
+     electricity_consumer_number: fd.get("electricity_consumer_number"),
+     bank_account_number: fd.get("bank_account_number"),
+     ifsc_code: fd.get("ifsc_code").toUpperCase(),
+     pan_number: fd.get("pan_number").toUpperCase()
+   };
+
+   // Validate and upload each document
+   for(const [field,column] of Object.entries(fileFields)){
+     const file = fd.get(field);
+
+     if(!file || !file.size)
+       throw new Error("Please upload " + field.replaceAll("_"," "));
+
+     if(file.size > 8*1024*1024)
+       throw new Error("Each file must be below 8 MB.");
+
+     const allowed = [
+       "image/jpeg","image/png","image/webp","application/pdf"
+     ];
+
+     if(!allowed.includes(file.type))
+       throw new Error("Unsupported file type: " + field);
+
+     if(field === "site_photo" && file.type === "application/pdf")
+       throw new Error("Site photo must be an image.");
+
+     const extension = {
+       "image/jpeg":"jpg",
+       "image/png":"png",
+       "image/webp":"webp",
+       "application/pdf":"pdf"
+     }[file.type];
+
+     const path = applicationId + "/" + field + "." + extension;
+
+     const {error} = await db.storage
+       .from("solar-documents")
+       .upload(path,file,{
+         upsert:false,
+         contentType:file.type
+       });
+
+     if(error) throw error;
+
+     data[column] = path;
+   }
+
+   button.textContent = "SAVING APPLICATION...";
+
+   const {error} = await db
+     .from("solar_applications")
+     .insert([data]);
+
+   if(error) throw error;
+
+   message.style.color = "green";
+   message.textContent =
+     "Booking submitted successfully! Application ID: " + applicationId;
+
+   form.reset();
+
+ }catch(error){
+   console.error(error);
+   message.style.color = "red";
+   message.textContent = "Submission failed: " + error.message;
+ }finally{
+   button.disabled = false;
+   button.textContent = "SUBMIT SOLAR BOOKING";
+ }
+});
+</script>
+
+</body>
+</html>
