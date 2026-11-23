@@ -353,6 +353,34 @@ form.addEventListener("submit", async function(e){
  }
 });
 </script>
+<script>
+  // Disable right-click context menu
+  document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+  });
 
+  // Disable common DevTools and View Source keyboard shortcuts
+  document.addEventListener("keydown", function (e) {
+    // F12
+    if (e.key === "F12") {
+      e.preventDefault();
+    }
+    // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (Inspect / Console)
+    if (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(e.key.toUpperCase())) {
+      e.preventDefault();
+    }
+    // Ctrl+U (View Source) or Ctrl+S (Save Page)
+    if (e.ctrlKey && ["U", "S"].includes(e.key.toUpperCase())) {
+      e.preventDefault();
+    }
+    // Mac shortcuts (Cmd+Option+I / Cmd+U)
+    if (e.metaKey && e.altKey && e.key.toUpperCase() === "I") {
+      e.preventDefault();
+    }
+    if (e.metaKey && e.key.toUpperCase() === "U") {
+      e.preventDefault();
+    }
+  });
+</script>
 </body>
 </html>
